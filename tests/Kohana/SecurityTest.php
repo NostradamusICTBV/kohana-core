@@ -19,9 +19,9 @@ class Kohana_SecurityTest extends Unittest_TestCase
 	 */
 	public function provider_encode_php_tags()
 	{
-		return array(
-			array("&lt;?php echo 'helloo'; ?&gt;", "<?php echo 'helloo'; ?>"),
-		);
+		return [
+			["&lt;?php echo 'helloo'; ?&gt;", "<?php echo 'helloo'; ?>"],
+		];
 	}
 
 	/**
@@ -37,17 +37,41 @@ class Kohana_SecurityTest extends Unittest_TestCase
 	}
 
 	/**
+	 * Provides test data for test_strip_image_tags()
+	 *
+	 * @return array Test data sets
+	 */
+	public function provider_strip_image_tags()
+	{
+		return [
+			['foo', '<img src="foo" />'],
+		];
+	}
+
+	/**
+	 * Tests Security::strip_image_tags()
+	 *
+	 * @test
+	 * @dataProvider provider_strip_image_tags
+	 * @covers Security::strip_image_tags
+	 */
+	public function test_strip_image_tags($expected, $input)
+	{
+		$this->assertSame($expected, Security::strip_image_tags($input));
+	}
+
+	/**
 	 * Provides test data for Security::token()
 	 *
 	 * @return array Test data sets
 	 */
 	public function provider_csrf_token()
 	{
-		$array = array();
+		$array = [];
 		for ($i = 0; $i <= 4; $i++)
 		{
 			Security::$token_name = 'token_'.$i;
-			$array[] = array(Security::token(TRUE), Security::check(Security::token(FALSE)), $i);
+			$array[] = [Security::token(TRUE), Security::check(Security::token(FALSE)), $i];
 		}
 		return $array;
 	}

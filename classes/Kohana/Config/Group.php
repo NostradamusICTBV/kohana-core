@@ -11,8 +11,8 @@
  * @package    Kohana
  * @category   Configuration
  * @author     Kohana Team
- * @copyright  (c) 2012-2014 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Config_Group extends ArrayObject {
 
@@ -38,7 +38,7 @@ class Kohana_Config_Group extends ArrayObject {
 	 * @param string         $group    The group name
 	 * @param array          $config   Group's config
 	 */
-	public function __construct(Kohana_Config $instance, $group, array $config = array())
+	public function __construct(Kohana_Config $instance, $group, array $config = [])
 	{
 		$this->_parent_instance = $instance;
 		$this->_group_name      = $group;
@@ -121,6 +121,7 @@ class Kohana_Config_Group extends ArrayObject {
 	 * @param string $key   The key of the config item we're changing
 	 * @param mixed  $value The new array value
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet($key, $value)
 	{
 		$this->_parent_instance->_write_config($this->_group_name, $key, $value);

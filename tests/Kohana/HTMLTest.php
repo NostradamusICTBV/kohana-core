@@ -10,23 +10,10 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     BRMatt <matthew@sigswitch.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_HTMLTest extends Unittest_TestCase {
-
-	/**
-	 * Defaults for this test
-	 * @var array
-	 */
-	// @codingStandardsIgnoreStart
-	protected $environmentDefault = [
-		'Kohana::$base_url' => '/kohana/',
-		'Kohana::$index_file' => 'index.php',
-		'HTML::$strict' => TRUE,
-		'HTTP_HOST'	=> 'www.kohanaframework.org',
-	];
-	// @codingStandardsIgnoreEnd
 
 	/**
 	 * Sets up the environment
@@ -38,6 +25,19 @@ class Kohana_HTMLTest extends Unittest_TestCase {
 		parent::setUp();
 		Kohana::$config->load('url')->set('trusted_hosts', ['www\.kohanaframework\.org']);
 	}
+
+	/**
+	 * Defaults for this test
+	 * @var array
+	 */
+	// @codingStandardsIgnoreStart
+	protected $environmentDefault = [
+		'Kohana::$base_url'    => '/kohana/',
+		'Kohana::$index_file'  => 'index.php',
+		'HTML::$strict' => TRUE,
+		'HTTP_HOST'	=> 'www.kohanaframework.org',
+	];
+	// @codingStandardsIgnoreStart
 
 	/**
 	 * Provides test data for test_attributes()
@@ -131,6 +131,7 @@ class Kohana_HTMLTest extends Unittest_TestCase {
 				'<script type="text/javascript" src="//google.com/script.js"></script>',
 				'//google.com/script.js',
 			],
+
 		];
 	}
 
@@ -200,7 +201,9 @@ class Kohana_HTMLTest extends Unittest_TestCase {
 				// #4283: http://dev.kohanaframework.org/issues/4283
 				'<link type="text/css" href="https://www.kohanaframework.org/kohana/index.php/my/style.css" rel="stylesheet/less" />',
 				'my/style.css',
-				['rel' => 'stylesheet/less'],
+				[
+					'rel' => 'stylesheet/less'
+				],
 				'https',
 				TRUE
 			],
@@ -403,6 +406,7 @@ class Kohana_HTMLTest extends Unittest_TestCase {
 		);
 	}
 
+
 	/**
 	 * Provides test data for test_image
 	 *
@@ -429,10 +433,6 @@ class Kohana_HTMLTest extends Unittest_TestCase {
 				['alt' => '...',],
 				'https',
 				TRUE
-			],
-			[
-				'<img src="data:image/gif;base64,R0lGODlhBQAFAIAAAHx8fP///yH5BAEAAAEALAAAAAAFAAUAAAIIBGKGF72rTAEAOw==" />',
-				'data:image/gif;base64,R0lGODlhBQAFAIAAAHx8fP///yH5BAEAAAEALAAAAAAFAAUAAAIIBGKGF72rTAEAOw==',
 			],
 		];
 	}

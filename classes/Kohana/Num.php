@@ -6,8 +6,8 @@
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Num {
 
@@ -19,8 +19,7 @@ class Kohana_Num {
 	/**
 	 * @var  array  Valid byte units => power of 2 that defines the unit's size
 	 */
-	public static $byte_units = array
-	(
+	public static $byte_units = [
 		'B'   => 0,
 		'K'   => 10,
 		'Ki'  => 10,
@@ -54,23 +53,7 @@ class Kohana_Num {
 		'Yi'  => 80,
 		'YB'  => 80,
 		'YiB' => 80,
-	);
-
-	/**
-	 * @var  array  SI looking prefixes
-	 */
-	public static $si_prefixes = array
-	(
-		'B'   => 0,
-		'KB'  => 3,
-		'MB'  => 6,
-		'GB'  => 9,
-		'TB'  => 12,
-		'PB'  => 15,
-		'EB'  => 18,
-		'ZB'  => 21,
-		'YB'  => 24,
-	);
+	];
 
 	/**
 	 * Returns the English ordinal suffix (th, st, nd, etc) of a number.
@@ -150,7 +133,7 @@ class Kohana_Num {
 	 */
 	public static function round($value, $precision = 0, $mode = self::ROUND_HALF_UP, $native = TRUE)
 	{
-		if (version_compare(PHP_VERSION, '5.3', '>=') AND $native)
+		if ($native)
 		{
 			return round($value, $precision, $mode);
 		}
@@ -213,16 +196,12 @@ class Kohana_Num {
 	 *     echo Num::bytes('200K');  // 204800
 	 *     echo Num::bytes('5MiB');  // 5242880
 	 *     echo Num::bytes('1000');  // 1000
-	 *     echo Num::bytes('2.5GB', FALSE); // 2684354560
-	 *     echo Num::bytes('2.5GB'); // 2500000000
-	 *     echo Num::bytes('2.5GiB'); // 2684354560
+	 *     echo Num::bytes('2.5GB'); // 2684354560
 	 *
-	 * @param   string  $size  file size in SB format
-	 * @param   bool  $si Use SI prefixes
+	 * @param   string  $bytes  file size in SB format
 	 * @return  float
-	 * @throws Kohana_Exception
 	 */
-	public static function bytes($size, $si = TRUE)
+	public static function bytes($size)
 	{
 		// Prepare the size
 		$size = trim( (string) $size);
@@ -235,9 +214,9 @@ class Kohana_Num {
 
 		// Verify the size format and store the matching parts
 		if ( ! preg_match($pattern, $size, $matches))
-			throw new Kohana_Exception('The byte unit size, ":size", is improperly formatted.', array(
+			throw new Kohana_Exception('The byte unit size, ":size", is improperly formatted.', [
 				':size' => $size,
-			));
+			]);
 
 		// Find the float value of the size
 		$size = (float) $matches[1];
@@ -245,16 +224,8 @@ class Kohana_Num {
 		// Find the actual unit, assume B if no unit specified
 		$unit = Arr::get($matches, 2, 'B');
 
-		if(array_key_exists($unit, Num::$si_prefixes) AND $si === TRUE)
-		{
-			// Convert the size into bytes using SI prefixes (decimal)
-			$bytes = $size * pow(10, Num::$si_prefixes[$unit]);
-		}
-		else
-		{
-			// Convert the size into bytes
-			$bytes = $size * pow(2, Num::$byte_units[$unit]);
-		}
+		// Convert the size into bytes
+		$bytes = $size * pow(2, Num::$byte_units[$unit]);
 
 		return $bytes;
 	}

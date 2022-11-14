@@ -12,8 +12,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @uses       [PECL HTTP](http://php.net/manual/en/book.http.php)
  */
 class Kohana_Request_Client_HTTP extends Request_Client_External {
@@ -25,7 +25,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	 * @param   array    $params Params
 	 * @throws  Request_Exception
 	 */
-	public function __construct(array $params = array())
+	public function __construct(array $params = [])
 	{
 		// Check that PECL HTTP supports requests
 		if ( ! http_support(HTTP_SUPPORT_REQUESTS))
@@ -41,7 +41,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	 * @var     array     curl options
 	 * @link    http://www.php.net/manual/function.curl-setopt
 	 */
-	protected $_options = array();
+	protected $_options = [];
 
 	/**
 	 * Sends the HTTP message [Request] to a remote server and processes
@@ -53,16 +53,16 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	 */
 	public function _send_message(Request $request, Response $response)
 	{
-		$http_method_mapping = array(
-			Kohana_HTTP_Request::GET     => HTTPRequest::METH_GET,
-			Kohana_HTTP_Request::HEAD    => HTTPRequest::METH_HEAD,
-			Kohana_HTTP_Request::POST    => HTTPRequest::METH_POST,
-			Kohana_HTTP_Request::PUT     => HTTPRequest::METH_PUT,
-			Kohana_HTTP_Request::DELETE  => HTTPRequest::METH_DELETE,
-			Kohana_HTTP_Request::OPTIONS => HTTPRequest::METH_OPTIONS,
-			Kohana_HTTP_Request::TRACE   => HTTPRequest::METH_TRACE,
-			Kohana_HTTP_Request::CONNECT => HTTPRequest::METH_CONNECT,
-		);
+		$http_method_mapping = [
+			HTTP_Request::GET     => HTTPRequest::METH_GET,
+			HTTP_Request::HEAD    => HTTPRequest::METH_HEAD,
+			HTTP_Request::POST    => HTTPRequest::METH_POST,
+			HTTP_Request::PUT     => HTTPRequest::METH_PUT,
+			HTTP_Request::DELETE  => HTTPRequest::METH_DELETE,
+			HTTP_Request::OPTIONS => HTTPRequest::METH_OPTIONS,
+			HTTP_Request::TRACE   => HTTPRequest::METH_TRACE,
+			HTTP_Request::CONNECT => HTTPRequest::METH_CONNECT,
+		];
 
 		// Create an http request object
 		$http_request = new HTTPRequest($request->uri(), $http_method_mapping[$request->method()]);
@@ -83,7 +83,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 		$http_request->setQueryData($request->query());
 
 		// Set the body
-		if ($request->method() == Kohana_HTTP_Request::PUT)
+		if ($request->method() == HTTP_Request::PUT)
 		{
 			$http_request->addPutData($request->body());
 		}

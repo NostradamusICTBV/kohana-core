@@ -10,8 +10,8 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Jeremy Bush <contractfrombelow@gmail.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_FormTest extends Unittest_TestCase {
 
@@ -36,20 +36,20 @@ class Kohana_FormTest extends Unittest_TestCase {
 	{
 		return [
 			[
-				['', NULL],
-				['action' => '']
+				  ['', NULL],
+				  ['action' => '']
 			],
 			[
-				[NULL, NULL],
-				['action' => '']
+				  [NULL, NULL],
+				  ['action' => '']
 			],
 			[
-				['foo', NULL],
-				['action' => '/foo']
+				  ['foo', NULL],
+				  ['action' => '/foo']
 			],
 			[
-				['foo', ['method' => 'get']],
-				['action' => '/foo', 'method' => 'get']
+				  ['foo', ['method' => 'get']],
+				  ['action' => '/foo', 'method' => 'get']
 			],
 			[
 				['//www.example.com/', NULL],
@@ -105,9 +105,9 @@ class Kohana_FormTest extends Unittest_TestCase {
 	{
 		return [
 			// $value, $result
-			['input', 'foo', 'bar', NULL, 'input'],
-			['input', 'foo',  NULL, NULL, 'input'],
-			['hidden', 'foo', 'bar', NULL, 'hidden'],
+			['input',    'foo', 'bar', NULL, 'input'],
+			['input',    'foo',  NULL, NULL, 'input'],
+			['hidden',   'foo', 'bar', NULL, 'hidden'],
 			['password', 'foo', 'bar', NULL, 'password'],
 		];
 	}
@@ -205,13 +205,7 @@ class Kohana_FormTest extends Unittest_TestCase {
 	 */
 	public function test_check($type, $name, $value, $checked, $attributes)
 	{
-		$matcher = [
-			'tag' => 'input',
-			'attributes' => [
-				'name' => $name,
-				'type' => $type
-			]
-		];
+		$matcher = ['tag' => 'input', 'attributes' => ['name' => $name, 'type' => $type]];
 
 		if ($value !== NULL)
 		{
@@ -361,8 +355,6 @@ class Kohana_FormTest extends Unittest_TestCase {
 		return [
 			// $value, $result
 			['foo', 'bar', ['src' => 'media/img/login.png'], '<input type="image" name="foo" value="bar" src="/media/img/login.png" />'],
-			['foo', 'bar', ['src' => 'http://kohanaframework.org/media/img/login.png'], '<input type="image" name="foo" value="bar" src="http://kohanaframework.org/media/img/login.png" />'],
-			['foo', 'bar', ['src' => '//kohanaframework.org/media/img/login.png'], '<input type="image" name="foo" value="bar" src="//kohanaframework.org/media/img/login.png" />'],
 		];
 	}
 

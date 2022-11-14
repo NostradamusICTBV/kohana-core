@@ -5,8 +5,8 @@
  * @package    Kohana
  * @category   Logging
  * @author     Jeremy Bush
- * @copyright  (c) 2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Log_Syslog extends Log_Writer {
 
@@ -14,24 +14,6 @@ class Kohana_Log_Syslog extends Log_Writer {
 	 * @var  string  The syslog identifier
 	 */
 	protected $_ident;
-
-	/**
-	 * String log level to numeric lookup table.
-	 *
-	 * Windows users see PHP Bug #18090
-	 *
-	 * @var array
-	 */
-	protected $_log_levels = array(
-		\Psr\Log\LogLevel::EMERGENCY => LOG_EMERG,
-		\Psr\Log\LogLevel::ALERT     => LOG_ALERT,
-		\Psr\Log\LogLevel::CRITICAL  => LOG_CRIT,
-		\Psr\Log\LogLevel::ERROR     => LOG_ERR,
-		\Psr\Log\LogLevel::WARNING   => LOG_WARNING,
-		\Psr\Log\LogLevel::NOTICE    => LOG_NOTICE,
-		\Psr\Log\LogLevel::INFO      => LOG_INFO,
-		\Psr\Log\LogLevel::DEBUG     => LOG_DEBUG,
-	);
 
 	/**
 	 * Creates a new syslog logger.
@@ -58,41 +40,15 @@ class Kohana_Log_Syslog extends Log_Writer {
 	 */
 	public function write(array $messages)
 	{
-		$filtered_messages = $this->filter($messages);
-
-		$strace_level = $this->get_strace_level();
-
-		foreach ($filtered_messages as $message)
+		foreach ($messages as $message)
 		{
-			// convert the level into int level
-			$level = $this->_log_levels[$message['level']];
+			syslog($message['level'], $message['body']);
 
-			// write to syslog
-			$this->_syslog($level, $message['body']);
-
-			if (isset($message['exception']))
+			if (isset($message['additional']['exception']))
 			{
-				// convert PSR log level into syslog log level
-				$level = $this->_log_levels[$strace_level];
-
-				// write to syslog
-				$this->_syslog($level, $message['exception']->getTraceAsString());
+				syslog(Log_Writer::$strace_level, $message['additional']['exception']->getTraceAsString());
 			}
 		}
-	}
-
-	/**
-	 * Proxy for the native syslog function - to allow mocking in unit tests
-	 *
-	 * @param int $priority a combination of the facility and the level
-	 * @param string $message the message to send
-	 *
-	 * @return bool
-	 * @see syslog
-	 */
-	protected function _syslog($priority, $message)
-	{
-		return syslog($priority, $message);
 	}
 
 	/**

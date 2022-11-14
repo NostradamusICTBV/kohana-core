@@ -5,39 +5,44 @@
  * @package    Kohana
  * @category   Logging
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
-abstract class Kohana_Log_Writer implements Kohana_Log_Filter_Aware {
+abstract class Kohana_Log_Writer {
 
 	/**
-	 * @var  string  date/time format for writing the timestamp of log entries.
+	 * @var  string  timestamp format for log entries.
 	 *
 	 * Defaults to Date::$timestamp_format
 	 */
-	private $timestamp_format;
+	public static $timestamp;
 
 	/**
-	 * @var  string  timezone for this log writer
+	 * @var  string  timezone for log entries
 	 *
 	 * Defaults to Date::$timezone, which defaults to date_default_timezone_get()
 	 */
-	private $timezone;
+	public static $timezone;
 
 	/**
-	 * @var  string  Level to use for stack traces
+	 * Numeric log level to string lookup table.
+	 * @var array
 	 */
-	private $strace_level = \Psr\Log\LogLevel::DEBUG;
+	protected $_log_levels = [
+		LOG_EMERG   => 'EMERGENCY',
+		LOG_ALERT   => 'ALERT',
+		LOG_CRIT    => 'CRITICAL',
+		LOG_ERR     => 'ERROR',
+		LOG_WARNING => 'WARNING',
+		LOG_NOTICE  => 'NOTICE',
+		LOG_INFO    => 'INFO',
+		LOG_DEBUG   => 'DEBUG',
+	];
 
 	/**
-	 * @var  string  default string format of the log entry
+	 * @var  int  Level to use for stack traces
 	 */
-	private $format = "time --- level: body in file:line";
-
-	/**
-	 * @var Kohana_Log_Filter[] array of log filters
-	 */
-	private $filters = array();
+	public static $strace_level = LOG_DEBUG;
 
 	/**
 	 * Write an array of messages.
@@ -62,174 +67,24 @@ abstract class Kohana_Log_Writer implements Kohana_Log_Filter_Aware {
 	}
 
 	/**
-	 * Gets the date/time format for writing a timestamp
-	 * 
-	 * @return string
-	 */
-	public function get_timestamp_format()
-	{
-		return $this->timestamp_format;
-	}
-
-	/**
-	 * Sets the date/time format for writing a timestamp
-	 * 
-	 * @param string $timestamp_format
-	 * @return Log_Writer
-	 */
-	public function set_timestamp_format($timestamp_format)
-	{
-		$this->timestamp_format = (string) $timestamp_format;
-		
-		return $this;
-	}
-	
-	/**
-	 * Gets the log level used when tracing an exception stack
-	 * 
-	 * @return string the PSR-3 log level used for stack tracing
-	 */
-	public function get_strace_level()
-	{
-		return $this->strace_level;
-	}
-
-	/**
-	 * Sets the log level used when tracing an exception stack
-	 * 
-	 * @param mixed $level
-	 * @throws InvalidArgumentException
-	 * @return Log_Writer
-	 */
-	public function set_strace_level($level)
-	{
-		$this->strace_level = Log::to_psr_level($level);
-		
-		return $this;
-	}
-	
-	/**
-	 * Gets the default string format of the log entry
-	 * 
-	 * @return string
-	 */
-	public function get_format()
-	{
-		return $this->format;
-	}
-
-	/**
-	 * Sets the default string format of the log entry
-	 * 
-	 * @param string $format
-	 * @return Log_Writer
-	 */
-	public function set_format($format)
-	{
-		$this->format = (string) $format;
-		
-		return $this;
-	}
-	
-	/**
-	 * Gets the timezone of this Log_Writer
-	 * 
-	 * @return string
-	 */
-	public function get_timezone()
-	{
-		return $this->timezone;
-	}
-
-	/**
-	 * Sets the timezone of this Log_Writer
-	 * 
-	 * @param string $timezone
-	 * @throws InvalidArgumentException
-	 * @return Log_Writer
-	 */
-	public function set_timezone($timezone)
-	{
-		if ( ! in_array($timezone, DateTimeZone::listIdentifiers()))
-		{
-			throw new InvalidArgumentException(
-				'Argument 1 of set_timezone must be a valid timezone.'
-			);
-		}
-
-		$this->timezone = $timezone;
-
-		return $this;
-	}
-
-	/**
-	 * Ataches a log filter to the writer
-	 *
-	 * @param Kohana_Log_Filter $filter
-	 * @return Log_Writer
-	 */
-	public function attach_filter(Kohana_Log_Filter $filter)
-	{
-		$this->filters[spl_object_hash($filter)] = $filter;
-
-		return $this;
-	}
-
-	/**
-	 * Detaches a log filter
-	 *
-	 * @param Kohana_Log_Filter $filter
-	 * @return Log_Writer
-	 */
-	public function detach_filter(Kohana_Log_Filter $filter)
-	{
-		// Remove the writer
-		unset($this->filters[spl_object_hash($filter)]);
-
-		return $this;
-	}
-
-	/**
-	 * Filter the given log entries if a Kohana_Log_Filter exists
-	 *
-	 * @param array $messages
-	 * @return array Filtered messages
-	 */
-	public function filter(array $messages)
-	{
-		if (empty($messages))
-		{
-			return [];
-		}
-
-		foreach ($this->filters as $filter)
-		{
-			$messages = $filter->process($messages);
-		}
-		return $messages;
-	}
-
-	/**
 	 * Formats a log entry.
 	 *
 	 * @param   array   $message
 	 * @param   string  $format
 	 * @return  string
 	 */
-	public function format_message(array $message, $format = NULL)
+	public function format_message(array $message, $format = "time --- level: body in file:line")
 	{
-		$format = $format ? (string) $format : $this->format;
-
-		$message['time'] = Date::formatted_time('@'.$message['time'], $this->timestamp_format, $this->timezone, TRUE);
-		$message['level'] = strtoupper($message['level']);
+		$message['time'] = Date::formatted_time('@'.$message['time'], Log_Writer::$timestamp, Log_Writer::$timezone, TRUE);
+		$message['level'] = $this->_log_levels[$message['level']];
 
 		$string = strtr($format, array_filter($message, 'is_scalar'));
 
-		if (isset($message['exception']))
+		if (isset($message['additional']['exception']))
 		{
 			// Re-use as much as possible, just resetting the body to the trace
-			$message['body'] = $message['exception']->getTraceAsString();
-			$message['level'] = strtoupper($this->strace_level);
+			$message['body'] = $message['additional']['exception']->getTraceAsString();
+			$message['level'] = $this->_log_levels[Log_Writer::$strace_level];
 
 			$string .= PHP_EOL.strtr($format, array_filter($message, 'is_scalar'));
 		}

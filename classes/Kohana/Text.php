@@ -5,15 +5,15 @@
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Text {
 
 	/**
 	 * @var  array   number units and text equivalents
 	 */
-	public static $units = array(
+	public static $units = [
 		1000000000 => 'billion',
 		1000000    => 'million',
 		1000       => 'thousand',
@@ -23,7 +23,7 @@ class Kohana_Text {
 		70 => 'seventy',
 		60 => 'sixty',
 		50 => 'fifty',
-		40 => 'fourty',
+		40 => 'forty',
 		30 => 'thirty',
 		20 => 'twenty',
 		19 => 'nineteen',
@@ -45,40 +45,7 @@ class Kohana_Text {
 		3  => 'three',
 		2  => 'two',
 		1  => 'one',
-	);
-
-	/**
-	 * Interpolates context values into the message placeholders.
-	 *
-	 * @author Jordi Boggiano <j.boggiano@seld.be>
-	 *
-	 * @param string $message
-	 * @param array $context
-	 * @return string
-	 */
-	public static function interpolate($message, array $context = array())
-	{
-		// return $message if no placeholder is found
-		if (false === strpos($message, '{')) {
-			return $message;
-		}
-
-		// better context replacements for types other than strings
-		$replacements = array();
-		foreach ($context as $key => $val)
-		{
-			if (is_null($val) || is_scalar($val) || (is_object($val) && method_exists($val, "__toString"))) {
-				$replacements['{' . $key . '}'] = $val;
-			} elseif (is_object($val)) {
-				$replacements['{' . $key . '}'] = '[object ' . get_class($val) . ']';
-			} else {
-				$replacements['{' . $key . '}'] = '[' . gettype($val) . ']';
-			}
-		}
-
-		// interpolate replacement values into the message and return
-		return strtr($message, $replacements);
-	}
+	];
 
 	/**
 	 * Limits a phrase to a given number of words.
@@ -244,7 +211,7 @@ class Kohana_Text {
 		for ($i = 0; $i < $length; $i++)
 		{
 			// Select a random character from the pool and add it to the string
-			$str .= $pool[mt_rand(0, $max)];
+			$str .= $pool[random_int(0, $max)];
 		}
 
 		// Make sure alnum strings contain at least one letter and one digit
@@ -253,12 +220,12 @@ class Kohana_Text {
 			if (ctype_alpha($str))
 			{
 				// Add a random digit
-				$str[mt_rand(0, $length - 1)] = chr(mt_rand(48, 57));
+				$str[random_int(0, $length - 1)] = chr(random_int(48, 57));
 			}
 			elseif (ctype_digit($str))
 			{
 				// Add a random letter
-				$str[mt_rand(0, $length - 1)] = chr(mt_rand(65, 90));
+				$str[random_int(0, $length - 1)] = chr(random_int(65, 90));
 			}
 		}
 
@@ -459,7 +426,7 @@ class Kohana_Text {
 			return '';
 
 		// Standardize newlines
-		$str = str_replace(array("\r\n", "\r"), "\n", $str);
+		$str = str_replace(["\r\n", "\r"], "\n", $str);
 
 		// Trim whitespace on each line
 		$str = preg_replace('~^[ \t]+~m', '', $str);
@@ -518,13 +485,13 @@ class Kohana_Text {
 		// IEC prefixes (binary)
 		if ($si == FALSE OR strpos($force_unit, 'i') !== FALSE)
 		{
-			$units = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
+			$units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
 			$mod   = 1024;
 		}
 		// SI prefixes (decimal)
 		else
 		{
-			$units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB');
+			$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
 			$mod   = 1000;
 		}
 
@@ -550,13 +517,13 @@ class Kohana_Text {
 	 * @return  string
 	 * @since   3.0.8
 	 */
-	public static function number($number, $separator = ' and ')
+	public static function number($number)
 	{
 		// The number must always be an integer
 		$number = (int) $number;
 
 		// Uncompiled text version
-		$text = array();
+		$text = [];
 
 		// Last matched unit within the loop
 		$last_unit = NULL;
@@ -612,7 +579,7 @@ class Kohana_Text {
 
 		if (isset($and))
 		{
-			$text .= $separator.$and;
+			$text .= ' and '.$and;
 		}
 
 		return $text;
@@ -632,7 +599,7 @@ class Kohana_Text {
 	 */
 	public static function widont($str)
 	{
-		// use '%' as delimiter and 'x' as modifier
+		// use '%' as delimiter and 'x' as modifier 
  		$widont_regex = "%
 			((?:</?(?:a|em|span|strong|i|b)[^>]*>)|[^<>\s]) # must be proceeded by an approved inline opening or closing tag or a nontag/nonspace
 			\s+                                             # the space to replace
@@ -666,7 +633,7 @@ class Kohana_Text {
 	{
 		if (is_array($value))
 		{
-			$data = array();
+			$data = [];
 			foreach ($value as $part)
 			{
 				// Add each part to the set
@@ -679,7 +646,7 @@ class Kohana_Text {
 		if ($value === 'browser' OR $value == 'version')
 		{
 			// Extra data will be captured
-			$info = array();
+			$info = [];
 
 			// Load browsers
 			$browsers = Kohana::$config->load('user_agents')->browser;
@@ -725,43 +692,4 @@ class Kohana_Text {
 		return FALSE;
 	}
 
-	/**
-	 * Turns an array of strings/ints into a readable, comma separated list.
-	 *
-	 * Examples:
-	 *     array('eggs', 'milk', 'cheese') => "eggs, milk, and cheese".
-	 *     array('eggs', 'milk', 'cheese', '&') => "eggs, milk, & cheese".
-	 *     array('eggs', 'milk', 'cheese', '&', FALSE) => "eggs, milk & cheese".
-	 *
-	 * @throws  InvalidArgumentException
-	 * @param   array   $words         An array of words.
-	 * @param   string  $conjunction   The conjunction term used (e.g. 'and', 'or' etc.).
-	 * @param   bool    $serial_comma  Whether a serial comma should be used.
-	 * @return  string                 An inline, human readable list.
-	 */
-	public static function readable_list(array $words, $conjunction = 'and', $serial_comma = TRUE)
-	{
-		// First, validate that the method parameters are suitable.
-		foreach ($words as $word)
-		{
-			// Check that the word isn't an array itself.
-			if (is_array($word))
-			{
-				throw new Kohana_Exception('The array must only have one dimension.');
-			}
-			// Check that the value of the word is appropriate.
-			elseif ( ! is_string($word) AND ! is_int($word) AND ! (is_object($word) AND method_exists($word, '__toString')))
-			{
-				throw new Kohana_Exception('Array values must be either strings or integers.');
-			}
-		}
-
-		// Build the 'readable list'.
-		$last_word = array_pop($words);
-		$string = implode(', ', $words).($serial_comma ? ', ' : ' ').$conjunction.' '.$last_word;
-
-		// Return the 'readable list'.
-		return $string;
-	}
-
-} // End text
+}

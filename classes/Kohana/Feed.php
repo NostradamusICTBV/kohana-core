@@ -5,8 +5,8 @@
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Feed {
 
@@ -26,9 +26,6 @@ class Kohana_Feed {
 		// Make limit an integer
 		$limit = (int) $limit;
 
-		// Disable error reporting while opening the feed
-		$error_level = error_reporting(0);
-
 		// Allow loading by filename or raw XML string
 		if (Valid::url($feed))
 		{
@@ -39,18 +36,19 @@ class Kohana_Feed {
 		elseif (is_file($feed))
 		{
 			// Get file contents
-			$feed = file_get_contents($feed);
+			$feed = @file_get_contents($feed);
+
+			// Feed could not be loaded
+			if ($feed === FALSE)
+				return [];
 		}
 
 		// Load the feed
-		$feed = simplexml_load_string($feed, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-		// Restore error reporting
-		error_reporting($error_level);
+		$feed = @simplexml_load_string($feed, 'SimpleXMLElement', LIBXML_NOCDATA);
 
 		// Feed could not be loaded
 		if ($feed === FALSE)
-			return array();
+			return [];
 
 		$namespaces = $feed->getNamespaces(TRUE);
 
@@ -58,7 +56,7 @@ class Kohana_Feed {
 		$feed = isset($feed->channel) ? $feed->xpath('//item') : $feed->entry;
 
 		$i = 0;
-		$items = array();
+		$items = [];
 
 		foreach ($feed as $item)
 		{
@@ -87,7 +85,7 @@ class Kohana_Feed {
 	 */
 	public static function create($info, $items, $encoding = 'UTF-8')
 	{
-		$info += array('title' => 'Generated Feed', 'link' => '', 'generator' => 'KohanaPHP');
+		$info += ['title' => 'Generated Feed', 'link' => '', 'generator' => 'KohanaPHP'];
 
 		$feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
 		$feed = simplexml_load_string($feed);

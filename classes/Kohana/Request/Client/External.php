@@ -25,8 +25,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @uses       [PECL HTTP](http://php.net/manual/en/book.http.php)
  */
 abstract class Kohana_Request_Client_External extends Request_Client {
@@ -53,7 +53,7 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 	 * @return  Request_Client_External
 	 * @throws  Request_Exception
 	 */
-	public static function factory(array $params = array(), $client = NULL)
+	public static function factory(array $params = [], $client = NULL)
 	{
 		if ($client === NULL)
 		{
@@ -75,7 +75,7 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 	 * @link    http://www.php.net/manual/function.curl-setopt
 	 * @link    http://www.php.net/manual/http.request.options
 	 */
-	protected $_options = array();
+	protected $_options = [];
 
 	/**
 	 * Processes the request, executing the controller action that handles this
@@ -123,7 +123,7 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 		// Resolve the POST fields
 		if ($post = $request->post())
 		{
-			$request->body(http_build_query($post, NULL, '&'))
+			$request->body(http_build_query($post, '', '&'))
 				->headers('content-type', 'application/x-www-form-urlencoded; charset='.Kohana::$charset);
 		}
 

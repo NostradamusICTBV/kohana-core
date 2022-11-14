@@ -7,16 +7,13 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_View {
 
-	/**
-	 * @param mixed[] Array of global variables
-	 * @deprecated
-	 */
-	protected static $_global_data = array();
+	// Array of global variables
+	protected static $_global_data = [];
 
 	/**
 	 * Returns a new View object. If you do not define the "file" parameter,
@@ -82,8 +79,6 @@ class Kohana_View {
 	 * variable will be accessible to all views.
 	 *
 	 *     View::set_global($name, $value);
-	 * 
-	 * [!!] Use of global view variables is deprecated and strongly discouraged
 	 *
 	 * You can also use an array or Traversable object to set several values at once:
 	 *
@@ -93,7 +88,6 @@ class Kohana_View {
 	 * [!!] Note: When setting with using Traversable object we're not attaching the whole object to the view,
 	 * i.e. the object's standard properties will not be available in the view context.
 	 *
-	 * @deprecated in favour of setting relevant variables on each specific view
 	 * @param   string|array|Traversable  $key    variable name or an array of variables
 	 * @param   mixed                     $value  value
 	 * @return  void
@@ -119,9 +113,6 @@ class Kohana_View {
 	 *
 	 *     View::bind_global($key, $value);
 	 *
-	 * [!!] Use of global view variables is deprecated and strongly discouraged
-	 *
-	 * @deprecated in favour of setting relevant variables on each specific view
 	 * @param   string  $key    variable name
 	 * @param   mixed   $value  referenced variable
 	 * @return  void
@@ -135,7 +126,7 @@ class Kohana_View {
 	protected $_file;
 
 	// Array of local variables
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * Sets the initial view filename and local data. Views should almost
@@ -145,7 +136,6 @@ class Kohana_View {
 	 *
 	 * @param   string  $file   view filename
 	 * @param   array   $data   array of values
-	 * @return  void
 	 * @uses    View::set_filename
 	 */
 	public function __construct($file = NULL, array $data = NULL)
@@ -187,7 +177,7 @@ class Kohana_View {
 		else
 		{
 			throw new Kohana_Exception('View variable is not set: :var',
-				array(':var' => $key));
+				[':var' => $key]);
 		}
 	}
 
@@ -272,9 +262,9 @@ class Kohana_View {
 	{
 		if (($path = Kohana::find_file('views', $file)) === FALSE)
 		{
-			throw new View_Exception('The requested view :file could not be found', array(
+			throw new View_Exception('The requested view :file could not be found', [
 				':file' => $file,
-			));
+			]);
 		}
 
 		// Store the file path locally

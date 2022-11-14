@@ -18,9 +18,8 @@
    - [Modules](modules)
    - [Routing](routing)
    - [Error Handling](errors)
-   - [Logging](logging)
    - [Tips & Common Mistakes](tips)
-   - [Upgrading from v3.3](upgrading)
+   - [Upgrading from Kohana](upgrading-from-kohana)
 - Basic Usage
    - [Debugging](debugging)
    - [Loading Classes](autoloading)
@@ -40,6 +39,7 @@
    - [Deploying](security/deploying)
 - Tutorials
    - [Hello World](tutorials/hello-world)
+   - [Base controller for application](tutorials/basic-controller)
    - [Simple MVC](tutorials/simple-mvc)
    - [Custom Error Pages](tutorials/error-pages)
    - [Clean URLs](tutorials/clean-urls)

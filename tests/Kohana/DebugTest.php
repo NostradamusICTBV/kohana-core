@@ -13,39 +13,11 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Jeremy Bush <contractfrombelow@gmail.com>
- * @copyright  (c) 2008-2014 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_DebugTest extends Unittest_TestCase
 {
-
-	/**
-	 * Provides test data for test_type()
-	 *
-	 * @return array
-	 */
-	public function provider_type()
-	{
-		return array(
-			array('foo', 'string'),
-			array(FALSE, 'boolean'),
-			array(new stdClass, 'stdClass'),
-		);
-	}
-
-	/**
-	 * Tests Debug::type()
-	 *
-	 * @test
-	 * @dataProvider provider_type
-	 * @covers Debug::type
-	 * @param boolean $thing    The thing to return type of
-	 * @param boolean $expected Output of Debug::type
-	 */
-	public function test_type($var, $expected)
-	{
-		$this->assertEquals($expected, Debug::type($var));
-	}
 
 	/**
 	 * Provides test data for test_debug()
@@ -54,10 +26,10 @@ class Kohana_DebugTest extends Unittest_TestCase
 	 */
 	public function provider_vars()
 	{
-		return array(
+		return [
 			// $thing, $expected
-			array(array('foobar'), "<pre class=\"debug\"><small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span></pre>"),
-		);
+			[['foobar'], "<pre class=\"debug\"><small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span></pre>"],
+		];
 	}
 
 	/**
@@ -81,16 +53,16 @@ class Kohana_DebugTest extends Unittest_TestCase
 	 */
 	public function provider_debug_path()
 	{
-		return array(
-			array(
+		return [
+			[
 				SYSPATH.'classes'.DIRECTORY_SEPARATOR.'kohana'.EXT,
 				'SYSPATH'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'kohana.php'
-			),
-			array(
+			],
+			[
 				MODPATH.$this->dirSeparator('unittest/classes/kohana/unittest/runner').EXT,
 				$this->dirSeparator('MODPATH/unittest/classes/kohana/unittest/runner').EXT
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -114,15 +86,15 @@ class Kohana_DebugTest extends Unittest_TestCase
 	 */
 	public function provider_dump()
 	{
-		return array(
-			array('foobar', 128, 10, '<small>string</small><span>(6)</span> "foobar"'),
-			array('foobar', 2, 10, '<small>string</small><span>(6)</span> "fo&nbsp;&hellip;"'),
-			array(NULL, 128, 10, '<small>NULL</small>'),
-			array(TRUE, 128, 10, '<small>bool</small> TRUE'),
-			array(array('foobar'), 128, 10, "<small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span>"),
-			array(new StdClass, 128, 10, "<small>object</small> <span>stdClass(0)</span> <code>{\n}</code>"),
-			array("fo\x6F\xFF\x00bar\x8F\xC2\xB110", 128, 10, '<small>string</small><span>(10)</span> "foobar±10"'),
-			array(array('level1' => array('level2' => array('level3' => array('level4' => array('value' => 'something'))))), 128, 4,
+		return [
+			['foobar', 128, 10, '<small>string</small><span>(6)</span> "foobar"'],
+			['foobar', 2, 10, '<small>string</small><span>(6)</span> "fo&nbsp;&hellip;"'],
+			[NULL, 128, 10, '<small>NULL</small>'],
+			[TRUE, 128, 10, '<small>bool</small> TRUE'],
+			[['foobar'], 128, 10, "<small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span>"],
+			[new StdClass, 128, 10, "<small>object</small> <span>stdClass(0)</span> <code>{\n}</code>"],
+			["fo\x6F\xFF\x00bar\x8F\xC2\xB110", 128, 10, '<small>string</small><span>(10)</span> "foobar±10"'],
+			[['level1' => ['level2' => ['level3' => ['level4' => ['value' => 'something']]]]], 128, 4,
 '<small>array</small><span>(1)</span> <span>(
     "level1" => <small>array</small><span>(1)</span> <span>(
         "level2" => <small>array</small><span>(1)</span> <span>(
@@ -133,8 +105,8 @@ class Kohana_DebugTest extends Unittest_TestCase
             )</span>
         )</span>
     )</span>
-)</span>'),
-		);
+)</span>'],
+		];
 	}
 
 	/**

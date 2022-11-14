@@ -6,8 +6,8 @@
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_HTML {
 
@@ -52,7 +52,6 @@ class Kohana_HTML {
 
 	/**
 	 * @var  boolean  automatically target external URLs to a new window?
-	 * @deprecated deprecated since version 3.4.0
 	 */
 	public static $windowed_urls = FALSE;
 
