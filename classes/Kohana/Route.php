@@ -30,8 +30,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Route {
 
@@ -57,7 +57,7 @@ class Kohana_Route {
 	/**
 	 * @var  array   list of valid localhost entries
 	 */
-	public static $localhosts = array(FALSE, '', 'local', 'localhost');
+	public static $localhosts = [FALSE, '', 'local', 'localhost'];
 
 	/**
 	 * @var  string  default action for all routes
@@ -72,7 +72,7 @@ class Kohana_Route {
 	/**
 	 * @var  array
 	 */
-	protected static $_routes = array();
+	protected static $_routes = [];
 
 	/**
 	 * Stores a named route and returns it. The "action" will always be set to
@@ -107,7 +107,7 @@ class Kohana_Route {
 		if ( ! isset(Route::$_routes[$name]))
 		{
 			throw new Kohana_Exception('The requested route does not exist: :route',
-				array(':route' => $name));
+				[':route' => $name]);
 		}
 
 		return Route::$_routes[$name];
@@ -167,9 +167,9 @@ class Kohana_Route {
 			catch (Exception $e)
 			{
 				// We most likely have a lambda in a route, which cannot be cached
-				throw new Kohana_Exception('One or more routes could not be cached (:message)', array(
+				throw new Kohana_Exception('One or more routes could not be cached (:message)', [
 						':message' => $e->getMessage(),
-					), 0, $e);
+					], 0, $e);
 			}
 		}
 		else
@@ -246,15 +246,15 @@ class Kohana_Route {
 		if (strpos($expression, '(') !== FALSE)
 		{
 			// Make optional parts of the URI non-capturing and optional
-			$expression = str_replace(array('(', ')'), array('(?:', ')?'), $expression);
+			$expression = str_replace(['(', ')'], ['(?:', ')?'], $expression);
 		}
 
 		// Insert default regex for keys
-		$expression = str_replace(array('<', '>'), array('(?P<', '>'.Route::REGEX_SEGMENT.')'), $expression);
+		$expression = str_replace(['<', '>'], ['(?P<', '>'.Route::REGEX_SEGMENT.')'], $expression);
 
 		if ($regex)
 		{
-			$search = $replace = array();
+			$search = $replace = [];
 			foreach ($regex as $key => $value)
 			{
 				$search[]  = "<$key>".Route::REGEX_SEGMENT;
@@ -271,7 +271,7 @@ class Kohana_Route {
 	/**
 	 * @var  array  route filters
 	 */
-	protected $_filters = array();
+	protected $_filters = [];
 
 	/**
 	 * @var  string  route URI
@@ -281,12 +281,12 @@ class Kohana_Route {
 	/**
 	 * @var  array
 	 */
-	protected $_regex = array();
+	protected $_regex = [];
 
 	/**
 	 * @var  array
 	 */
-	protected $_defaults = array('action' => 'index', 'host' => FALSE);
+	protected $_defaults = ['action' => 'index', 'host' => FALSE];
 
 	/**
 	 * @var  string
@@ -351,14 +351,6 @@ class Kohana_Route {
 			return $this->_defaults;
 		}
 
-		if (isset($defaults['controller']) AND substr($defaults['controller'], 0, 1) === '\\')
-		{
-			if (isset($defaults['directory']))
-			{
-				throw new Kohana_Exception('Route directory should not be set when the controller is a FQCN.');
-			}
-		}
-
 		$this->_defaults = $defaults;
 
 		return $this;
@@ -368,18 +360,17 @@ class Kohana_Route {
 	 * Filters to be run before route parameters are returned:
 	 *
 	 *     $route->filter(
-	 *         function(Route $route, $params, Request $request)
+	 *         function(Route $route, array $params, Request $request)
 	 *         {
 	 *             if ($request->method() !== HTTP_Request::POST)
 	 *             {
 	 *                 return FALSE; // This route only matches POST requests
 	 *             }
-	 *             if ($params AND $params['controller'] === 'welcome')
+	 *             if (isset($params['controller']) AND $params['controller'] == 'Welcome')
 	 *             {
-	 *                 $params['controller'] = 'home';
+	 *                 $params['controller'] = 'Home';
+	 *                 return $params;
 	 *             }
-	 *
-	 *             return $params;
 	 *         }
 	 *     );
 	 *
@@ -389,7 +380,7 @@ class Kohana_Route {
 	 * [!!] Default parameters are added before filters are called!
 	 *
 	 * @throws  Kohana_Exception
-	 * @param   array   $callback   callback string, array, or closure
+	 * @param   callable   $callback   Filter callback
 	 * @return  $this
 	 */
 	public function filter($callback)
@@ -431,7 +422,7 @@ class Kohana_Route {
 		if ( ! preg_match($this->_route_regex, $uri, $matches))
 			return FALSE;
 
-		$params = array();
+		$params = [];
 		foreach ($matches as $key => $value)
 		{
 			if (is_int($key))
@@ -519,10 +510,12 @@ class Kohana_Route {
 	{
 		if ($params)
 		{
-			// @issue #4079 rawurlencode parameters
-			$params = array_map('rawurlencode', $params);
+			foreach($params as $key => $value) {
+                		$params[$key] = rawurlencode($value ?? '');
+			}
+
 			// decode slashes back, see Apache docs about AllowEncodedSlashes and AcceptPathInfo
-			$params = str_replace(array('%2F', '%5C'), array('/', '\\'), $params);
+			$params = str_replace(['%2F', '%5C'], ['/', '\\'], $params);
 		}
 
 		$defaults = $this->_defaults;
@@ -537,7 +530,7 @@ class Kohana_Route {
 		 */
 		$compile = function ($portion, $required) use (&$compile, $defaults, $params)
 		{
-			$missing = array();
+			$missing = [];
 
 			$pattern = '#(?:'.Route::REGEX_KEY.'|'.Route::REGEX_GROUP.')#';
 			$result = preg_replace_callback($pattern, function ($matches) use (&$compile, $defaults, &$missing, $params, &$required)
@@ -587,11 +580,11 @@ class Kohana_Route {
 			{
 				throw new Kohana_Exception(
 					'Required route parameter not passed: :param',
-					array(':param' => reset($missing))
+					[':param' => reset($missing)]
 				);
 			}
 
-			return array($result, $required);
+			return [$result, $required];
 		};
 
 		list($uri) = $compile($this->_uri, TRUE);

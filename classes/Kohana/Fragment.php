@@ -13,8 +13,8 @@
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @uses       Kohana::cache
  */
 class Kohana_Fragment {
@@ -32,7 +32,7 @@ class Kohana_Fragment {
 	/**
 	 * @var  array  list of buffer => cache key
 	 */
-	protected static $_caches = array();
+	protected static $_caches = [];
 
 	/**
 	 * Generate the cache key name for a fragment.

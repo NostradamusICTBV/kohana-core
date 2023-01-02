@@ -5,8 +5,8 @@
  * @package    Kohana
  * @category   Security
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Validation implements ArrayAccess {
 
@@ -22,22 +22,22 @@ class Kohana_Validation implements ArrayAccess {
 	}
 
 	// Bound values
-	protected $_bound = array();
+	protected $_bound = [];
 
 	// Field rules
-	protected $_rules = array();
+	protected $_rules = [];
 
 	// Field labels
-	protected $_labels = array();
+	protected $_labels = [];
 
 	// Rules that are executed even when the value is empty
-	protected $_empty_rules = array('not_empty', 'matches');
+	protected $_empty_rules = ['not_empty', 'matches'];
 
 	// Error list, field => rule
-	protected $_errors = array();
+	protected $_errors = [];
 
 	// Array to validate
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * Sets the unique "any field" key and creates an ArrayObject from the
@@ -60,6 +60,7 @@ class Kohana_Validation implements ArrayAccess {
 	 * @param   mixed    $value     value to set
 	 * @return  void
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet($offset, $value)
 	{
 		throw new Kohana_Exception('Validation objects are read-only.');
@@ -72,6 +73,7 @@ class Kohana_Validation implements ArrayAccess {
 	 * @param   string  $offset key to check
 	 * @return  bool    whether the key is set
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetExists($offset)
 	{
 		return isset($this->_data[$offset]);
@@ -85,6 +87,7 @@ class Kohana_Validation implements ArrayAccess {
 	 * @param   string  $offset key to unset
 	 * @return  void
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($offset)
 	{
 		throw new Kohana_Exception('Validation objects are read-only.');
@@ -97,6 +100,7 @@ class Kohana_Validation implements ArrayAccess {
 	 * @param   string  $offset key to return
 	 * @return  mixed   value from array
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet($offset)
 	{
 		return $this->_data[$offset];
@@ -213,7 +217,7 @@ class Kohana_Validation implements ArrayAccess {
 		if ($params === NULL)
 		{
 			// Default to array(':value')
-			$params = array(':value');
+			$params = [':value'];
 		}
 
 		if ($field !== TRUE AND ! isset($this->_labels[$field]))
@@ -223,7 +227,7 @@ class Kohana_Validation implements ArrayAccess {
 		}
 
 		// Store the rule and params for this rule
-		$this->_rules[$field][] = array($rule, $params);
+		$this->_rules[$field][] = [$rule, $params];
 
 		return $this;
 	}
@@ -293,7 +297,7 @@ class Kohana_Validation implements ArrayAccess {
 		}
 
 		// New data set
-		$data = $this->_errors = array();
+		$data = $this->_errors = [];
 
 		// Store the original data because this class should not modify it post-validation
 		$original = $this->_data;
@@ -314,7 +318,7 @@ class Kohana_Validation implements ArrayAccess {
 				if ( ! isset($rules[$field]))
 				{
 					// Initialize the rules for this field
-					$rules[$field] = array();
+					$rules[$field] = [];
 				}
 
 				// Append the rules
@@ -340,11 +344,10 @@ class Kohana_Validation implements ArrayAccess {
 			$value = $this[$field];
 
 			// Bind the field name and value to :field and :value respectively
-			$this->bind(array
-			(
+			$this->bind([
 				':field' => $field,
 				':value' => $value,
-			));
+			]);
 
 			foreach ($set as $array)
 			{
@@ -459,7 +462,7 @@ class Kohana_Validation implements ArrayAccess {
 	 */
 	public function error($field, $error, array $params = NULL)
 	{
-		$this->_errors[$field] = array($error, $params);
+		$this->_errors[$field] = [$error, $params];
 
 		return $this;
 	}
@@ -492,7 +495,7 @@ class Kohana_Validation implements ArrayAccess {
 		}
 
 		// Create a new message list
-		$messages = array();
+		$messages = [];
 
 		foreach ($this->_errors as $field => $set)
 		{
@@ -506,20 +509,20 @@ class Kohana_Validation implements ArrayAccess {
 				if (is_string($translate))
 				{
 					// Translate the label using the specified language
-					$label = I18n::translate($label, NULL, $translate);
+					$label = __($label, NULL, $translate);
 				}
 				else
 				{
 					// Translate the label
-					$label = I18n::translate($label);
+					$label = __($label);
 				}
 			}
 
 			// Start the translation values list
-			$values = array(
+			$values = [
 				':field' => $label,
 				':value' => Arr::get($this, $field),
-			);
+			];
 
 			if (is_array($values[':value']))
 			{
@@ -553,12 +556,12 @@ class Kohana_Validation implements ArrayAccess {
 							if (is_string($translate))
 							{
 								// Translate the value using the specified language
-								$value = I18n::translate($value, NULL, $translate);
+								$value = __($value, NULL, $translate);
 							}
 							else
 							{
 								// Translate the value
-								$value = I18n::translate($value);
+								$value = __($value);
 							}
 						}
 					}
@@ -595,12 +598,12 @@ class Kohana_Validation implements ArrayAccess {
 				if (is_string($translate))
 				{
 					// Translate the message using specified language
-					$message = I18n::translate($message, $values, $translate);
+					$message = __($message, $values, $translate);
 				}
 				else
 				{
 					// Translate the message using the default language
-					$message = I18n::translate($message, $values);
+					$message = __($message, $values);
 				}
 			}
 			else

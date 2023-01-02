@@ -1,5 +1,5 @@
 {
-    "_readme":     "NOTE: see readme for COMPOSER_ROOT_VERSION instructions if you have dependency issues",
+  "_readme":     "NOTE: see readme for COMPOSER_ROOT_VERSION instructions if you have dependency issues",
 	"name":        "kohana/core",
 	"description": "Core system classes for the Kohana application framework",
 	"homepage":    "http://kohanaframework.org",
@@ -20,24 +20,24 @@
 		"source":   "http://github.com/kohana/core"
 	},
 	"require": {
-		"php":        ">=5.4.0"
+		"php": ">=7.0"
 	},
 	"require-dev": {
-		"kohana/unittest":     "3.4.*@dev",
-		"kohana/koharness":    "*@dev"
+		"phpunit/phpunit": "^6.0|^7.0",
+		"phpunit/dbunit":"^3.0",
+		"phpunit/phpcov": "^4.0",
+		"php-coveralls/php-coveralls": "^2.0"
 	},
-	"suggest": {
-		"ext-http":   "*",
-		"ext-curl":   "*",
-		"ext-mcrypt": "*"
+	"replace": {
+		"kohana/core": "3.3.*"
 	},
 	"extra": {
 		"installer-paths": {
 			"vendor/{$vendor}/{$name}": ["type:kohana-module"]
 		},
 		"branch-alias": {
-			"dev-3.3/develop":  "3.3.x-dev",
-			"dev-3.4/develop":  "3.4.x-dev"
+			"dev-3.4/develop":  "3.4.x-dev",
+			"dev-3.5/develop":  "3.5.x-dev"
 		}
 	}
 }
