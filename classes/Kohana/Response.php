@@ -425,14 +425,14 @@ class Kohana_Response implements HTTP_Response {
 	 *
 	 * @param   string|resource|bool $filename filename with path, file stream, or TRUE for the current response
 	 * @param   string  $download   downloaded file name
-	 * @param   array   $options    additional options
+	 * @param   array|null $options    additional options
 	 * @return  void
 	 * @throws  Kohana_Exception
 	 * @uses    File::mime_by_ext
 	 * @uses    File::mime
 	 * @uses    Request::send_headers
 	 */
-	public function send_file($filename, $download = NULL, array $options = NULL)
+	public function send_file($filename, $download = NULL, ?array $options = NULL)
 	{
 		if ( ! empty($options['mime_type']))
 		{

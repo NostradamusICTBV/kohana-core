@@ -115,11 +115,11 @@ class Kohana_Log {
 	 *
 	 * @param   string  $level       level of message
 	 * @param   string  $message     message body
-	 * @param   array   $values      values to replace in the message
-	 * @param   array   $additional  additional custom parameters to supply to the log writer
+	 * @param   array|null $values      values to replace in the message
+	 * @param   array|null $additional  additional custom parameters to supply to the log writer
 	 * @return  Log
 	 */
-	public function add($level, $message, array $values = NULL, array $additional = NULL)
+	public function add($level, $message, ?array $values = NULL, ?array $additional = NULL)
 	{
 		if ($values)
 		{

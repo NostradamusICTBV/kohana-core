@@ -161,11 +161,11 @@ abstract class Kohana_Request_Client {
 	 * Getter and setter for the internal caching engine,
 	 * used to cache responses if available and valid.
 	 *
-	 * @param   HTTP_Cache  $cache  engine to use for caching
+	 * @param   HTTP_Cache|null  $cache  engine to use for caching
 	 * @return  HTTP_Cache
 	 * @return  Request_Client
 	 */
-	public function cache(HTTP_Cache $cache = NULL)
+	public function cache(?HTTP_Cache $cache = NULL)
 	{
 		if ($cache === NULL)
 			return $this->_cache;

@@ -495,10 +495,10 @@ class Kohana_Request implements HTTP_Request {
 	 *     $accept = Request::_parse_accept($header, $defaults);
 	 *
 	 * @param   string   $header   Header to parse
-	 * @param   array    $accepts  Default values
+	 * @param   array|null    $accepts  Default values
 	 * @return  array
 	 */
-	protected static function _parse_accept( & $header, array $accepts = NULL)
+	protected static function _parse_accept( & $header, ?array $accepts = NULL)
 	{
 		if ( ! empty($header))
 		{
@@ -809,10 +809,10 @@ class Kohana_Request implements HTTP_Request {
 	/**
 	 * Sets and gets the route from the request.
 	 *
-	 * @param   string $route
+	 * @param   Route|null $route
 	 * @return  mixed
 	 */
-	public function route(Route $route = NULL)
+	public function route(?Route $route = NULL)
 	{
 		if ($route === NULL)
 		{
@@ -892,7 +892,7 @@ class Kohana_Request implements HTTP_Request {
 	 * @return  Request_Client
 	 * @return  self
 	 */
-	public function client(Request_Client $client = NULL)
+	public function client(?Request_Client $client = NULL)
 	{
 		if ($client === NULL)
 			return $this->_client;

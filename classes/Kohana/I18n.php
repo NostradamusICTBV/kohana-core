@@ -44,11 +44,11 @@ class Kohana_I18n {
 	 *     // Change the current language to Spanish
 	 *     I18n::lang('es-es');
 	 *
-	 * @param   string  $lang   new language setting
+	 * @param   string|null  $lang   new language setting
 	 * @return  string
 	 * @since   3.0.2
 	 */
-	public static function lang($lang = NULL)
+	public static function lang(?$lang = NULL)
 	{
 		if ($lang)
 		{

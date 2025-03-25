@@ -90,12 +90,12 @@ abstract class Kohana_Session {
 	 *
 	 * [!!] Sessions can only be created using the [Session::instance] method.
 	 *
-	 * @param   array   $config configuration
+	 * @param   array|null   $config configuration
 	 * @param   string  $id     session id
 	 * @return  void
 	 * @uses    Session::read
 	 */
-	public function __construct(array $config = NULL, $id = NULL)
+	public function __construct(?array $config = NULL, $id = NULL)
 	{
 		if (isset($config['name']))
 		{

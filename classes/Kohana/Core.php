@@ -161,13 +161,13 @@ class Kohana_Core {
 	 * `boolean` | expose     | Set the X-Powered-By header
 	 *
 	 * @throws  Kohana_Exception
-	 * @param   array   $settings   Array of settings.  See above.
+	 * @param   array|null $settings   Array of settings.  See above.
 	 * @return  void
 	 * @uses    Kohana::sanitize
 	 * @uses    Kohana::cache
 	 * @uses    Profiler
 	 */
-	public static function init(array $settings = NULL)
+	public static function init(?array $settings = NULL)
 	{
 		if (Kohana::$_init)
 		{
@@ -471,10 +471,10 @@ class Kohana_Core {
 	 *
 	 *     Kohana::modules(array('modules/foo', MODPATH.'bar'));
 	 *
-	 * @param   array   $modules    list of module paths
+	 * @param   array|null   $modules    list of module paths
 	 * @return  array   enabled modules
 	 */
-	public static function modules(array $modules = NULL)
+	public static function modules(?array $modules = NULL)
 	{
 		if ($modules === NULL)
 		{
@@ -659,11 +659,11 @@ class Kohana_Core {
 	 *     // Find all view files.
 	 *     $views = Kohana::list_files('views');
 	 *
-	 * @param   string  $directory  directory name
-	 * @param   array   $paths      list of paths to search
+	 * @param   string|null  $directory  directory name
+	 * @param   array|null   $paths      list of paths to search
 	 * @return  array
 	 */
-	public static function list_files($directory = NULL, array $paths = NULL)
+	public static function list_files(?$directory = NULL, ?array $paths = NULL)
 	{
 		if ($directory !== NULL)
 		{
@@ -756,7 +756,7 @@ class Kohana_Core {
      *
      *     // Get the "foo" cache
      *     $foo = Kohana::cache('foo');
-     *     
+     *
      * @throws  Kohana_Exception
      * @param   string  $name       name of the cache
      * @param   mixed   $data       data to cache
