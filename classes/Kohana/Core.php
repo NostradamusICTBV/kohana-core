@@ -663,7 +663,7 @@ class Kohana_Core {
 	 * @param   array|null   $paths      list of paths to search
 	 * @return  array
 	 */
-	public static function list_files(?$directory = NULL, ?array $paths = NULL)
+	public static function list_files(?string $directory = NULL, ?array $paths = NULL)
 	{
 		if ($directory !== NULL)
 		{

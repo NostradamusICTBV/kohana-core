@@ -48,7 +48,7 @@ class Kohana_I18n {
 	 * @return  string
 	 * @since   3.0.2
 	 */
-	public static function lang(?$lang = NULL)
+	public static function lang(?string $lang = NULL)
 	{
 		if ($lang)
 		{
