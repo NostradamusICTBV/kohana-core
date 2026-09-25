@@ -101,6 +101,9 @@ class Kohana_Arr {
 		}
 		else
 		{
+			// PHP 8.5: null as an array key is deprecated, '' is what it meant
+			$path ??= '';
+
 			if ((is_object($array) AND property_exists($array, $path)) || (is_array($array) AND array_key_exists($path, $array)))
 			{
 				// No need to do extra processing
@@ -279,6 +282,9 @@ class Kohana_Arr {
 	 */
 	public static function get($array, $key, $default = NULL)
 	{
+		// PHP 8.5: null as an array offset is deprecated, '' is what it meant
+		$key ??= '';
+
 		if ($array instanceof ArrayObject) {
 			// This is a workaround for inconsistent implementation of isset between PHP and HHVM
 			// See https://github.com/facebook/hhvm/issues/3437
