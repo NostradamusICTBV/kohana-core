@@ -80,6 +80,9 @@ class Kohana_I18n {
 		// Load the translation table for this language
 		$table = I18n::load($lang);
 
+		// PHP 8.5: null as an array offset is deprecated, '' is what it meant
+		$string = (string) $string;
+
 		// Return the translated string if it exists
 		return isset($table[$string]) ? $table[$string] : $string;
 	}
